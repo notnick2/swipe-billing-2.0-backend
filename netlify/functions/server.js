@@ -6,6 +6,20 @@ const openai = new OpenAI({
 });
 
 exports.handler = async (event) => {
+  // Handle OPTIONS method (preflight request)
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'OPTIONS, POST',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
+      body: JSON.stringify({}),
+    };
+  }
+
+  // Handle POST method
   if (event.httpMethod === 'POST') {
     const { message } = JSON.parse(event.body);
 
@@ -32,9 +46,9 @@ exports.handler = async (event) => {
       return {
         statusCode: 200,
         headers: {
-          'Access-Control-Allow-Origin': '*',  // Allow requests from any origin
-          'Access-Control-Allow-Methods': 'OPTIONS, POST',  // Allow these methods
-          'Access-Control-Allow-Headers': 'Content-Type'  // Allow these headers
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'OPTIONS, POST',
+          'Access-Control-Allow-Headers': 'Content-Type',
         },
         body: JSON.stringify({ text: response.choices[0].message.content }),
       };
