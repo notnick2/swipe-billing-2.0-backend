@@ -4,19 +4,14 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const port = 5000;
-
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Initialize OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// Route to handle chat requests
-app.post('/chat', async (req, res) => {
+app.post('/api/chat', async (req, res) => {
   const { message } = req.body;
 
   try {
@@ -25,7 +20,7 @@ app.post('/chat', async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "you are assistant for a billing software named swipe billing. if asked about anything use generalized data to give the responses. you are available at the dashboard of the billing software so you have the complete data of their business so whenever they ask about their business or past billings give them response according to their data. as this is just the testing environment we dont have any real data so use some random but appropriate data to respond to the query"
+          content: "you are assistant for a billing software named swipe billing..."
         },
         {
           role: "user",
@@ -46,6 +41,4 @@ app.post('/chat', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+module.exports = app;
